@@ -42,10 +42,10 @@
             Name="buttonConvert"
             Width="150"
             Margin="0,25"
-            Command="{Binding BtnSetConversion}"
             Content="Convertir"
             RelativePanel.AlignHorizontalCenterWithPanel="True"
-            RelativePanel.Below="comboDevise" />
+            RelativePanel.Below="comboDevise" 
+            Command="{Binding BtnSetConversion}"/>
         <TextBlock
             Name="montantConvertLabel"
             RelativePanel.AlignHorizontalCenterWithPanel="True"

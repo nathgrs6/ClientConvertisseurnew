@@ -1,5 +1,7 @@
 ﻿using ClientConvertisseurV2.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,11 +16,25 @@ namespace ClientConvertisseurV2.ViewModels
 {
     public class ConvertisseurEuroViewModel : ObservableObject
     {
+        public IRelayCommand BtnSetConversion { get; }
         public ConvertisseurEuroViewModel()
         {
             GetDataOnLoadAsync();
+            BtnSetConversion = new RelayCommand(ActionSetConversion);
 
         }
+
+        private void ActionSetConversion()
+        {
+           
+            if (selectedDevise != null)
+            {
+                ConvertedAmount = Montant * SelectedDevise.Taux;
+
+            }
+            else DisplayNoDeviseDialog();
+        }
+
         private ObservableCollection<Devise> lesDevises;
 
         public ObservableCollection<Devise> LesDevises
@@ -52,13 +68,6 @@ namespace ClientConvertisseurV2.ViewModels
             set { convertedAmount = value; OnPropertyChanged(); }
         }
 
-
-
-
- 
-
-
-
         public async void GetDataOnLoadAsync()
         {
             WSService service = new WSService("https://localhost:7008/api/");
@@ -73,8 +82,34 @@ namespace ClientConvertisseurV2.ViewModels
             {
                 LesDevises = new ObservableCollection<Devise>(result);
             }
+            
 
         }
+        public async void DisplayNoDeviseDialog()
+        {
+            ContentDialog noDeviseDialog = new ContentDialog
+            {
+                Title = "Erreur",
+                Content = "Vous devez selectionner un devise.",
+                CloseButtonText = "Ok"
+            };
+            noDeviseDialog.XamlRoot = App.MainRoot.XamlRoot;
+            ContentDialogResult result = await noDeviseDialog.ShowAsync();
+        }
+        public async void DisplayNoApiDialog()
+        {
+            ContentDialog noDApiDialog = new ContentDialog
+            {
+                Title = "Erreur",
+                Content = "Api non disponible",
+                CloseButtonText = "Ok"
+            };
+            noDApiDialog.XamlRoot = App.MainRoot.XamlRoot;
+            ContentDialogResult result = await noDApiDialog.ShowAsync();
+        }
+      
+
     }
-    
+   
+
 }

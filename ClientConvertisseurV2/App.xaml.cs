@@ -3,6 +3,8 @@
 
 using ClientConvertisseurV2.View;
 using ClientConvertisseurV2.ViewModels;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -38,6 +40,7 @@ namespace ClientConvertisseurV2
         public App()
         {
             this.InitializeComponent();
+            Ioc.Default.ConfigureServices(new ServiceCollection().AddSingleton<ConvertisseurEuroViewModel>().BuildServiceProvider());
         }
 
         /// <summary>
@@ -51,8 +54,15 @@ namespace ClientConvertisseurV2
             this.m_window.Content = rootFrame;
             m_window.Activate();
             rootFrame.Navigate(typeof(ConvertisseurEuroPage));
+            MainRoot = m_window.Content as FrameworkElement;
         }
+        public static FrameworkElement MainRoot { get; private set; }
 
         private Window m_window;
+        public ConvertisseurEuroViewModel ConvertisseurEuroVM
+        {
+            get { return Ioc.Default.GetService<ConvertisseurEuroViewModel>(); }
+
+        }
     }
 }
