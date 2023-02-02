@@ -29,7 +29,7 @@ namespace ClientConvertisseurV2.ViewModels
            
             if (selectedDevise != null)
             {
-                ConvertedAmount = Montant * SelectedDevise.Taux;
+                ConvertedAmount = Montant * SelectedDevise;
 
             }
             else DisplayNoDeviseDialog();
