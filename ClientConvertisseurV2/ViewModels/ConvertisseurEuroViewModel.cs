@@ -24,12 +24,12 @@ namespace ClientConvertisseurV2.ViewModels
 
         }
 
-        private void ActionSetConversion()
+        public  void ActionSetConversion()
         {
            
             if (selectedDevise != null)
             {
-                ConvertedAmount = Montant * SelectedDevise;
+                ConvertedAmount = Montant * SelectedDevise.Taux;
 
             }
             else DisplayNoDeviseDialog();
@@ -107,8 +107,16 @@ namespace ClientConvertisseurV2.ViewModels
             noDApiDialog.XamlRoot = App.MainRoot.XamlRoot;
             ContentDialogResult result = await noDApiDialog.ShowAsync();
         }
-      
 
+        public override bool Equals(object obj)
+        {
+            return obj is ConvertisseurEuroViewModel model &&
+                   EqualityComparer<IRelayCommand>.Default.Equals(BtnSetConversion, model.BtnSetConversion) &&
+                   EqualityComparer<ObservableCollection<Devise>>.Default.Equals(LesDevises, model.LesDevises) &&
+                   EqualityComparer<Devise>.Default.Equals(SelectedDevise, model.SelectedDevise) &&
+                   Montant == model.Montant &&
+                   ConvertedAmount == model.ConvertedAmount;
+        }
     }
    
 
